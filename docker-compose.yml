@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+    nginx:
+        build: ./nginx
+        ports:
+            - 8081:80
+        depends_on:
+            - php
+        volumes:
+            - ./public:/var/www
+        environment:
+            - PHP_FPM_SERVER=php
+            - PHP_FPM_PORT=9000
+    php:
+        image: php:7.3.6-fpm-alpine3.9
+        volumes:
+            - ./public:/var/www
