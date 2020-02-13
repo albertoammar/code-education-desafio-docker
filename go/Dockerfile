@@ -1,8 +1,10 @@
-FROM golang:latest
-
+FROM golang:1.7.3 AS builder
 WORKDIR /go/src/app
 COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-RUN go build -o main .
+FROM scratch
 
-CMD ["./main"]
+WORKDIR /go/src/app
+COPY --from=0 /go/src/app .
+CMD ["./app"]
